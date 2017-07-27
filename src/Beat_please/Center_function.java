@@ -1,4 +1,4 @@
-package Beat_please;
+package Beat_please;   ////게임 끝나고 뒤로 가기 버튼 구현해야해.
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -9,10 +9,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;//ImageIcon 라이브러리
-import javax.swing.JButton; //JButton 라이브러리
-import javax.swing.JFrame; //JFrame클래스의 라이브러리
-import javax.swing.JLabel; //JLabel클래스의 라이브러리
+import javax.swing.ImageIcon;
+import javax.swing.JButton; 
+import javax.swing.JFrame; 
+import javax.swing.JLabel; 
 
 public class Center_function extends JFrame {//JFrame은 자바에서 text기반 프로그래밍이 아니라 GUI기반의 프로그래밍으로 만들기 위해 기본적으로 상속받아야 할것. 라이브러리는 위에 import해줌
 	
@@ -30,15 +30,18 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 	private ImageIcon leftButtonBasicImage = new ImageIcon(Main.class.getResource("../images/leftButtonBasic.jpg")); 
 	private ImageIcon rightButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/rightButtonEntered.jpg")); 
 	private ImageIcon rightButtonBasicImage = new ImageIcon(Main.class.getResource("../images/rightButtonBasic.jpg")); 
+	private ImageIcon GameStartButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/GameStartButtonEntered.jpg")); 
+	private ImageIcon GameStartButtonBasicImage = new ImageIcon(Main.class.getResource("../images/GameStartButtonBasic.jpg")); 
 	
 	private Image background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage();//Background 이미지를 담을 수 있는 객체를 초기화
 	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.jpg"))); //menuBar라는 객체 안에 menuBar.jpg 이미지을 초기화
 	
 	private JButton exitButton = new JButton(exitButtonBasicImage); //exitButton라는 객체 안에 exitButtonBasic.jpg 초기화(버튼에 이미지를 초기화)
-	private JButton startButton = new JButton(startButtonBasicImage); //이미지 초기화
-	private JButton quitButton = new JButton(quitButtonBasicImage); //이미지 초기화
-	private JButton leftButton = new JButton(leftButtonBasicImage); //이미지 초기화
-	private JButton rightButton = new JButton(rightButtonBasicImage); //이미지 초기화
+	private JButton startButton = new JButton(startButtonBasicImage); 
+	private JButton quitButton = new JButton(quitButtonBasicImage);
+	private JButton leftButton = new JButton(leftButtonBasicImage); 
+	private JButton rightButton = new JButton(rightButtonBasicImage); 
+	private JButton GameStartButton = new JButton(GameStartButtonBasicImage); 
 	
 	private int mouseX, mouseY; // 프로그램 안에서 마우스의 X, Y 좌표를 의미함. 드래그해서 화면이 이동하게 만들기 위해 쓴다.
 	
@@ -46,12 +49,13 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 	
 	ArrayList<Track> trackList = new ArrayList<Track>(); //각각의 곡 ,트랙을 담을 수 있는 list를 배열로 만든것
 	
-	private Image titleImage; //titleImage 선언    		 //7장부턴 아님:"정은지 Title Image"로 이미지 초기화
-	private Image selectedImage; //selectedImage 선언		 //7장부턴 아님: "정은지 Start Image"로 이미지 초기화
+	private Image LobbyImage; //LobbyImage 선언 
+	private Music LobbyMusic;
+	private Image selectedImage; //selectedImage 선언	
 	private Music selectedMusic; // selectedMusic 변수 선언
-	private int nowSelected = 0; //현재선택된 번호 선언. 초기화로 0
+	private int nowSelected = 0; //현재선택된 번호 선언. 초기화로 0 
 	
-	public Center_function()/////// 생성자
+	public Center_function()// 생성자
 	{
 		setUndecorated(true); //기본적으로 존재하는 메뉴바가 보이지않게됨.
 		setTitle("Dynamic Beat"); 
@@ -66,9 +70,10 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 		Music introMusic = new Music("introMusic.mp3", true); //시작화면에서 음악이 무한 반복되게 한다.
 		introMusic.start(); //뮤직 시작
 		
-		trackList.add(new Track("정은지 Title Image.png", "정은지 Start Image.jpg", "정은지 Game Image.jpg", "정은지 Selected.mp3", "정은지.mp3")); //5개의 매개변수가 들어감. 초기화. Track List ?? 이거 좀 잘 모르겟다. 곡관리를 위해 씀
-		trackList.add(new Track("창모 Title Image.png", "창모 Start Image.jpg", "창모 Game Image.jpg", "창모 Selected.mp3", "창모.mp3"));
-		trackList.add(new Track("캐논 Title Image.png", "캐논 Start Image.png", "캐논 Game Image.png", "캐논 Selected.mp3", "캐논.mp3"));
+		trackList.add(new Track("정은지LobbyImage.jpg", "정은지 Game Image.jpg","정은지.mp3")); //5개의 매개변수가 들어감. 초기화. Track List ?? 이거 좀 잘 모르겟다. 곡관리를 위해 씀
+		trackList.add(new Track("창모LobbyImage.jpg", "창모 Game Image.jpg", "창모.mp3"));
+		trackList.add(new Track("YBLobbyImage.jpg", "YBGameImage.jpg", "YB.mp3"));
+		trackList.add(new Track("CANONLobbyImage.jpg", "CANONGameImage.jpg", "CANON.mp3"));
 		
 		exitButton.setBounds(1245, 0, 30, 30); // 위치와 크기 정해줌
 		exitButton.setBorderPainted(false);
@@ -78,14 +83,14 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 			@Override
 			public void mouseEntered(MouseEvent e){ //마우스가 해당버튼에 올라왔을 때 이벤트처리
 				exitButton.setIcon(exitButtonEnteredImage); //exitButton의 아이콘을 exitButtonEnteredImage의 이미지로 바꿔줌
-				exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
+				//exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
 				buttonEnteredMusic.start(); //음악 시작
 			}
 			@Override
 			public void mouseExited(MouseEvent e){ //마우스가 해당버튼에서 나왔을 때 이벤트처리
 				exitButton.setIcon(exitButtonBasicImage); //exitButton의 아이콘을 exitButtonBasicImage의 이미지로 바꿔줌
-				exitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
+				//exitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
 			}
 			@Override
 			public void mousePressed(MouseEvent e){ // 마우스가 이미지를 눌렀을 때 이벤트처리
@@ -93,7 +98,7 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 				buttonEnteredMusic.start(); //음악 시작
 				introMusic.close();
 				try{
-					Thread.sleep(4000); //1초있다 프로그램 종료되게 하기위해
+					Thread.sleep(4000); //4초있다 프로그램 종료되게 하기위해
 				}catch (InterruptedException ex){
 					ex.printStackTrace(); // 이거 뭐냐?? 근원지를 찾아서 단계별로 에러는 출력?? 뭔소리??
 				}
@@ -110,14 +115,14 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 			@Override
 			public void mouseEntered(MouseEvent e){ //마우스가 해당버튼에 올라왔을 때 이벤트처리
 				startButton.setIcon(startButtonEnteredImage); //startButton의 아이콘을 startButtonEnteredImage의 이미지로 바꿔줌
-				startButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
+				//startButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
 				buttonEnteredMusic.start(); //음악 시작
 			}
 			@Override
 			public void mouseExited(MouseEvent e){ //마우스가 해당버튼에서 나왔을 때 이벤트처리
 				startButton.setIcon(startButtonBasicImage); //exitButton의 아이콘을 exitButtonBasicImage의 이미지로 바꿔줌
-				startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
+				//startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
 			}
 			@Override
 			public void mousePressed(MouseEvent e){ // 마우스가 이미지를 눌렀을 때 이벤트처리
@@ -129,13 +134,17 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 				}catch (InterruptedException ex){
 					ex.printStackTrace(); // 이거 뭐냐?? 근원지를 찾아서 단계별로 에러는 출력?? 뭔소리??
 				}
+				LobbyMusic = new Music("LobbyMusic.mp3", true);
+				LobbyMusic.start();
 				selectTrack(0);
 				startButton.setVisible(false);//startButton 안보이게
 				quitButton.setVisible(false);//quitButton 안보이게
 				leftButton.setVisible(true); //leftButton 보이게한다.
 				rightButton.setVisible(true);//rightButton 보이게한다.
+				GameStartButton.setVisible(true);
 				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();// background 이미지를 mainBackground로 바꿈
 				isMainScreen = true; // mainBackground에서 트루로 반환
+				
 			}
 		});
 		add(startButton); //JButton에 버튼 추가됨.
@@ -148,14 +157,14 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 			@Override
 			public void mouseEntered(MouseEvent e){ //마우스가 해당버튼에 올라왔을 때 이벤트처리
 				quitButton.setIcon(quitButtonEnteredImage); //quitButton의 아이콘을 quitButtonEnteredImage의 이미지로 바꿔줌
-				quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
+				//quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
 				buttonEnteredMusic.start(); //음악 시작
 			}
 			@Override
 			public void mouseExited(MouseEvent e){ //마우스가 해당버튼에서 나왔을 때 이벤트처리
 				quitButton.setIcon(quitButtonBasicImage); //quitButton의 아이콘을 quitButtonBasicImage의 이미지로 바꿔줌
-				quitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
+				//quitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
 			}
 			@Override
 			public void mousePressed(MouseEvent e){ // 마우스가 이미지를 눌렀을 때 이벤트처리
@@ -163,7 +172,7 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 				buttonEnteredMusic.start(); //음악 시작
 				introMusic.close();
 				try{
-					Thread.sleep(4000); //1초있다 프로그램 종료되게 하기위해
+					Thread.sleep(4000); //4초있다 프로그램 종료되게 하기위해
 				}catch (InterruptedException ex){
 					ex.printStackTrace(); // 이거 뭐냐?? 근원지를 찾아서 단계별로 에러는 출력?? 뭔소리??
 				}
@@ -181,19 +190,19 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 			@Override
 			public void mouseEntered(MouseEvent e){ //마우스가 해당버튼에 올라왔을 때 이벤트처리
 				leftButton.setIcon(leftButtonEnteredImage); //leftButton의 아이콘을 leftButtonEnteredImage의 이미지로 바꿔줌
-				leftButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
+				//leftButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
 				buttonEnteredMusic.start(); //음악 시작
 			}
 			@Override
 			public void mouseExited(MouseEvent e){ //마우스가 해당버튼에서 나왔을 때 이벤트처리
 				leftButton.setIcon(leftButtonBasicImage); //leftButton의 아이콘을 leftButtonBasicImage의 이미지로 바꿔줌
-				leftButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
+				//leftButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
 			}
 			@Override
 			public void mousePressed(MouseEvent e){ // 마우스가 이미지를 눌렀을 때 이벤트처리
-				//Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false); //마우스 눌렀을 때 소리 재생하게, 반복재생 안하게
-				//buttonEnteredMusic.start(); //음악 시작
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
+				buttonEnteredMusic.start(); //음악 시작
 				selectLeft();
 			}
 		});
@@ -208,23 +217,50 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 			@Override
 			public void mouseEntered(MouseEvent e){ //마우스가 해당버튼에 올라왔을 때 이벤트처리
 				rightButton.setIcon(rightButtonEnteredImage); //rightButton의 아이콘을 rightButtonEnteredImage의 이미지로 바꿔줌
-				rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
+				//rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
 				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
 				buttonEnteredMusic.start(); //음악 시작
 			}
 			@Override
 			public void mouseExited(MouseEvent e){ //마우스가 해당버튼에서 나왔을 때 이벤트처리
 				rightButton.setIcon(rightButtonBasicImage); //rightButton의 아이콘을 rightButtonBasicImage의 이미지로 바꿔줌
-				rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
+				//rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
 			}
 			@Override
 			public void mousePressed(MouseEvent e){ // 마우스가 이미지를 눌렀을 때 이벤트처리
-				//Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false); //마우스 눌렀을 때 소리 재생하게, 반복재생 안하게
-				//buttonEnteredMusic.start(); //음악 시작
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
+				buttonEnteredMusic.start(); //음악 시작
 				selectRight();
 			}
 		});
 		add(rightButton); //JButton에 버튼 추가됨.
+		
+		GameStartButton.setVisible(false);
+		GameStartButton.setBounds(570, 620,140, 60); // 위치와 크기 정해줌
+		GameStartButton.setBorderPainted(false);
+		GameStartButton.setContentAreaFilled(false);
+		GameStartButton.setFocusPainted(false);
+		GameStartButton.addMouseListener(new MouseAdapter(){ //마우스에 대한 이벤트 처리
+			@Override
+			public void mouseEntered(MouseEvent e){ //마우스가 해당버튼에 올라왔을 때 이벤트처리
+				GameStartButton.setIcon(GameStartButtonEnteredImage); //rightButton의 아이콘을 rightButtonEnteredImage의 이미지로 바꿔줌
+				//rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//마우스가 올라갔을 때 커서가 손가락 모양으로 바뀜
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
+				buttonEnteredMusic.start(); //음악 시작
+			}
+			@Override
+			public void mouseExited(MouseEvent e){ //마우스가 해당버튼에서 나왔을 때 이벤트처리
+				GameStartButton.setIcon(GameStartButtonBasicImage); //rightButton의 아이콘을 rightButtonBasicImage의 이미지로 바꿔줌
+				//rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//마우스가 나왓을 때 커서가 다시 돌아옴.
+			}
+			@Override
+			public void mousePressed(MouseEvent e){ // 마우스가 이미지를 눌렀을 때 이벤트처리
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);//마우스가 올라갔을 때 소리 재생하게, 반복 안하게
+				buttonEnteredMusic.start(); //음악 시작
+				gameStart(nowSelected, "start");
+			}
+		});
+		add(GameStartButton); //JButton에 버튼 추가됨.
 		
 		menuBar.setBounds(0, 0, 1280, 30); // 위치와 크기를 정해줌
 		menuBar.addMouseListener(new MouseAdapter(){ 
@@ -260,20 +296,23 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 		g.drawImage(background, 0, 0, null); //introBackground를 (0,0)에 그려줌. 이미지 화면에 출력할 때 g.drawImage사용
 		if(isMainScreen) // 시작화면이 아니라 메인화면일 때 보여질 수 있게 if문 사용
 		{
-			g.drawImage(selectedImage, 340, 100, null);
-			g.drawImage(titleImage,  340,  70,  null);
+			//g.drawImage(selectedImage, 340, 100, null);
+			g.drawImage(LobbyImage,  430,  70,  null);
 		}
 		paintComponents(g);//이미지를 단순하게 그려주는것 외에 버튼같은것이 추가되면 그려주는 것. 고정된 menuBar나 버튼을 그릴 때 사용함. "add(~)" 이런것들
 		this.repaint();//paint함수를 매순간마다 계속 반복되면서 불러옴. 
 	}
 
 	public void selectTrack(int nowSelected){ // 현재선택된 곡에 번호를 넣어줌으로써 해당곡이 선택되었음을 알려줌
-		if(selectedMusic !=null)
-			selectedMusic.close(); //selectedMusic 닫기
-		titleImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getTitleImage())).getImage(); //현재 선택된 곡이 가지고 있는 타이틀 이미지 값을 가져와서 넣어주겠다
-		selectedImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getStartImage())).getImage(); //현재 선택된 곡이 가지고 있는 스타트 이미지 값을 가져와서 넣어주겠다
-		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true); //현재 선택된 곡을 가져와서 무한 재생함.
-		selectedMusic.start();
+		
+		if(selectedMusic != null){
+			selectedMusic.close();
+		}
+			//selectedMusic.close(); //selectedMusic 닫기
+		LobbyImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getLobbyImage())).getImage(); //현재 선택된 곡이 가지고 있는 타이틀 이미지 값을 가져와서 넣어주겠다
+		selectedImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage(); //현재 선택된 곡이 가지고 있는 스타트 이미지 값을 가져와서 넣어주겠다
+		selectedMusic = new Music(trackList.get(nowSelected).getGameMusic(), true); //현재 선택된 곡을 가져와서 무한 재생함.
+		//selectedMusic.start();
 	}
 
 	public void selectLeft(){
@@ -290,6 +329,17 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 		else
 			nowSelected++;
 		selectTrack(nowSelected);
+	}
+	
+	public void gameStart(int nowSelected, String gameStart){
+		if(selectedMusic != null) //selectedMusic이 값이 있을 때
+			selectedMusic.close(); // 음악 끈다.
+		isMainScreen = false; //매인화면이 아니다 라는 것을 알려줌. screenDraw함수에서 if문이 실행안되게 하려고
+		leftButton.setVisible(false);
+		rightButton.setVisible(false);
+		GameStartButton.setVisible(false);
+		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();// 현재 선택이 된 곡에 대한 게임 이미지 불러옴
+
 	}
 
 }
