@@ -1,7 +1,6 @@
 package Beat_please;   ////게임 끝나고 뒤로 가기 버튼 구현해야해.
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics; //더블버퍼링을 위한 라이브러리
 import java.awt.Image;    //더블버퍼링을 위한 라이브러리
 import java.awt.event.MouseAdapter;
@@ -10,8 +9,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton; 
-import javax.swing.JFrame; 
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel; 
 
 public class Center_function extends JFrame {//JFrame은 자바에서 text기반 프로그래밍이 아니라 GUI기반의 프로그래밍으로 만들기 위해 기본적으로 상속받아야 할것. 라이브러리는 위에 import해줌
@@ -46,6 +45,7 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 	private int mouseX, mouseY; // 프로그램 안에서 마우스의 X, Y 좌표를 의미함. 드래그해서 화면이 이동하게 만들기 위해 쓴다.
 	
 	private boolean isMainScreen = false; // 처음엔 인트로화면이고 mainBackground에서 트루로 바꿔준다.
+	private boolean isGameScreen = false;
 	
 	ArrayList<Track> trackList = new ArrayList<Track>(); //각각의 곡 ,트랙을 담을 수 있는 list를 배열로 만든것
 	
@@ -54,6 +54,9 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 	private Image selectedImage; //selectedImage 선언	
 	private Music selectedMusic; // selectedMusic 변수 선언
 	private int nowSelected = 0; //현재선택된 번호 선언. 초기화로 0 
+	Music introMusic = new Music("introMusic.mp3", true); //시작화면에서 음악이 무한 반복되게 한다.
+
+	public static Game game;
 	
 	public Center_function()// 생성자
 	{
@@ -67,7 +70,8 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 		setBackground(new Color(0, 0, 0, 0));//paintComponents를 했을때 배경이 전부 흰색으로 바뀜
 		setLayout(null); //버튼이나 JLabel을 넣었을 때 그 위치에 꽂힘.
 		
-		Music introMusic = new Music("introMusic.mp3", true); //시작화면에서 음악이 무한 반복되게 한다.
+		addKeyListener(new KeyListener());
+		
 		introMusic.start(); //뮤직 시작
 		
 		trackList.add(new Track("정은지LobbyImage.jpg", "정은지 Game Image.jpg","정은지.mp3")); //5개의 매개변수가 들어감. 초기화. Track List ?? 이거 좀 잘 모르겟다. 곡관리를 위해 씀
@@ -287,7 +291,7 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 	{
 		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT); //1280*720 이미지를 screenImage에 넣음
 		screenGraphic = screenImage.getGraphics();//screenGraphic은 screenImage를 이용해서 그래픽 객체 얻어옴.
-		screenDraw(screenGraphic); // 스크린 그래픽에 그림 그려줌.
+		screenDraw( screenGraphic); // 스크린 그래픽에 그림 그려줌.
 		g.drawImage(screenImage,  0 , 0, null); //스크린 이미지를 (0,0)위치에 그려줌
 	}
 	
@@ -298,6 +302,10 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 		{
 			//g.drawImage(selectedImage, 340, 100, null);
 			g.drawImage(LobbyImage,  430,  70,  null);
+		}
+		if(isGameScreen)
+		{
+			game.screenDraw(g);
 		}
 		paintComponents(g);//이미지를 단순하게 그려주는것 외에 버튼같은것이 추가되면 그려주는 것. 고정된 menuBar나 버튼을 그릴 때 사용함. "add(~)" 이런것들
 		this.repaint();//paint함수를 매순간마다 계속 반복되면서 불러옴. 
@@ -339,7 +347,11 @@ public class Center_function extends JFrame {//JFrame은 자바에서 text기반
 		rightButton.setVisible(false);
 		GameStartButton.setVisible(false);
 		background = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getGameImage())).getImage();// 현재 선택이 된 곡에 대한 게임 이미지 불러옴
-
+		LobbyMusic.close();
+		isGameScreen = true;
+		setFocusable(true);
+		game = new Game(trackList.get(nowSelected).getGameMusic());
+		game.start();
 	}
 
 }
